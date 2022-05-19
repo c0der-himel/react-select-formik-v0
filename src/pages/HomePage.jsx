@@ -19,7 +19,10 @@ const HomePage = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    option: Yup.array().nullable().min(1, 'Required'),
+    option: Yup.array()
+      .min(2, 'select at least 2 options')
+      .nullable()
+      .required('Required'),
   });
 
   const onSubmit = (values) => {
@@ -48,7 +51,8 @@ const HomePage = () => {
               >
                 {(props) => {
                   console.log('props: ', props);
-                  const { setFieldValue, errors, touched } = props;
+                  const { setFieldValue, errors, touched, setFieldTouched } =
+                    props;
                   return (
                     <Form>
                       <div className="col-12">
@@ -64,11 +68,12 @@ const HomePage = () => {
                             id="option"
                             name="option"
                             className={
-                              errors.option && touched.option
+                              errors.option && touched
                                 ? 'form-control py-1 px-1 is-invalid'
                                 : 'form-control py-1 px-1'
                             }
                             defaultValue={selectedOption}
+                            onBlur={() => setFieldTouched('option', true)}
                             onChange={(e) => {
                               setSelectedOption(e);
                               setFieldValue('option', e);
